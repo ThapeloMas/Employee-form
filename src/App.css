@@ -1,3 +1,4 @@
+
 .App {
   display: flex;
   flex-direction: column;
@@ -33,7 +34,7 @@
   border: 2px solid #8cb690;
   border-radius: 5px;
   box-sizing: border-box;
-  box-shadow: 3px 3px 2px ;
+  box-shadow: 3px 3px 2px;
 }
 
 .form label.fname,
@@ -46,9 +47,7 @@
   font-weight: bold;
   font-size: 14px;
   color: #333;
-  
-
-} 
+}
 
 button {
   background-color: hsl(47, 88%, 63%);
@@ -56,6 +55,8 @@ button {
   padding: 10px;
   border: none;
   border-radius: 5px;
+
+  
   cursor: pointer;
 }
 
@@ -63,14 +64,32 @@ button:hover {
   background-color: #45a049;
 }
 
-.success-message {
+.search-container {
   margin-top: 20px;
+  width: 300px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #8cb690;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 3px 3px 2px #333;
+}
+
+.employee-list {
+  margin-top: 20px;
+  width: 300px;
+}
+
+.success-message {
   background: #d4edda;
   padding: 20px;
   border-radius: 10px;
   color: green;
   border: 1px solid #c3e6cb;
-  width: 300px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
@@ -81,7 +100,7 @@ button:hover {
   object-fit: cover;
   margin-top: 10px;
 }
-.heads{
+
+.heads {
   color: #45a049;
 }
-

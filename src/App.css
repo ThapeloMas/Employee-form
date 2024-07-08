@@ -102,5 +102,25 @@ button:hover {
 }
 
 .heads {
-  color: #45a049;
+ 
+    animation: change 3s step-end infinite;
+    }
+    
+    @keyframes change {
+      0% {
+        color: red
+      }
+    
+      25% {
+        color: green
+      }
+    
+      50% {
+        color: orange
+      }
+    
+      75% {
+        color: blue
+      }
+    
 }

@@ -1,3 +1,22 @@
 {
-  "employees": []
+  "employees": [
+    {
+      "id": "3763666372172",
+      "fname": "Thapelo",
+      "lname": "Mashao",
+      "position": "student",
+      "phone": "0727263118",
+      "email": "Thapelo0744@gmail.com",
+      "avatar": {}
+    },
+    {
+      "id": "3763666372172",
+      "fname": "Mokaba",
+      "lname": "Mashao",
+      "position": "student",
+      "phone": "720899041",
+      "email": "Thapelo0744@gmail.com",
+      "avatar": null
+    }
+  ]
 }

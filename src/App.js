@@ -119,36 +119,82 @@ function App() {
   return (
     <div className="App">
       <form className="form" onSubmit={handleSubmit}>
-        <h2 className='heads'>Employee registration form 📝</h2>
+        <h2 className="heads">Employee registration form 📝</h2>
         <label className="avatar">
           Avatar:
           <input type="file" name="avatar" onChange={handleChange} />
         </label>
         <label className="fname">
           First Name:
-          <input type="text" name="fname" pattern="[A-Za-z]*" minLength={2} placeholder="Enter letters only" value={formData.fname} onChange={handleChange} />
+          <input
+            type="text"
+            name="fname"
+            pattern="[A-Za-z]*"
+            minLength={2}
+            placeholder="Enter letters only"
+            value={formData.fname}
+            onChange={handleChange}
+          />
         </label>
         <label className="lname">
           Last Name:
-          <input type="text" name="lname" pattern="[A-Za-z]*" minLength={2} placeholder="Enter letters only" value={formData.lname} onChange={handleChange} />
+          <input
+            type="text"
+            name="lname"
+            pattern="[A-Za-z]*"
+            minLength={2}
+            placeholder="Enter letters only"
+            value={formData.lname}
+            onChange={handleChange}
+          />
         </label>
         <label className="id">
           ID:
-          <input type="text" name="id" pattern='\d*' minLength={13} maxLength={13} placeholder='Enter only numbers' value={formData.id} onChange={handleChange} />
+          <input
+            type="text"
+            name="id"
+            pattern="\d*"
+            minLength={13}
+            maxLength={13}
+            placeholder="Enter only numbers"
+            value={formData.id}
+            onChange={handleChange}
+          />
         </label>
         <label className="position">
           Position:
-          <input type="text" name="position" placeholder='Enter your Position' value={formData.position} onChange={handleChange} />
+          <input
+            type="text"
+            name="position"
+            placeholder="Enter your Position"
+            value={formData.position}
+            onChange={handleChange}
+          />
         </label>
         <label className="phone">
           Phone Number:
-          <input type="text" name="phone" pattern='\d*' minLength={10} maxLength={10} placeholder='Enter only numbers' value={formData.phone} onChange={handleChange} />
+          <input
+            type="text"
+            name="phone"
+            pattern="\d*"
+            minLength={10}
+            maxLength={10}
+            placeholder="Enter only numbers"
+            value={formData.phone}
+            onChange={handleChange}
+          />
         </label>
         <label className="email">
           Email:
-          <input type="email" name="email" placeholder='Enter your email' value={formData.email} onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </label>
-        <button type="submit">{isEditing ? 'Update' : 'Register'}</button>
+        <button type="submit">{isEditing ? "Update" : "Register"}</button>
       </form>
 
       <div className="search-container">
@@ -162,21 +208,46 @@ function App() {
 
       {filteredEmployees.length > 0 && (
         <div className="employee-list">
-          <h2 className='heads'>Employee List 📃</h2>
+          <h2 className="heads">Employee List 📃</h2>
           {filteredEmployees.map((employee, index) => (
             <div key={index} className="success-message">
-              <p><strong>First Name:</strong> {employee.fname}</p>
-              <p><strong>Last Name:</strong> {employee.lname}</p>
-              <p><strong>ID:</strong> {employee.id}</p>
-              <p><strong>Position:</strong> {employee.position}</p>
-              <p><strong>Phone Number:</strong> {employee.phone}</p>
-              <p><strong>Email:</strong> {employee.email}</p>
+              <p>
+                <strong>First Name:</strong> {employee.fname}
+              </p>
+              <p>
+                <strong>Last Name:</strong> {employee.lname}
+              </p>
+              <p>
+                <strong>ID:</strong> {employee.id}
+              </p>
+              <p>
+                <strong>Position:</strong> {employee.position}
+              </p>
+              <p>
+                <strong>Phone Number:</strong> {employee.phone}
+              </p>
+              <p>
+                <strong>Email:</strong> {employee.email}
+              </p>
               {employee.avatar && (
                 <div>
                   <strong>Avatar:</strong>
-                  <img src={URL.createObjectURL(employee.avatar)} alt="avatar" className="avatar-preview" />
+                  {employee.avatar instanceof File ? (
+                    <img
+                      src={URL.createObjectURL(employee.avatar)}
+                      alt="avatar"
+                      className="avatar-preview"
+                    />
+                  ) : (
+                    <img
+                      src={employee.avatar}
+                      alt="avatar"
+                      className="avatar-preview"
+                    />
+                  )}
                 </div>
               )}
+
               <br></br>
               <button onClick={() => handleEdit(index)}>Edit</button>
               <br></br>

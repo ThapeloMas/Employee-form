@@ -1,5 +1,4 @@
 
-
 .App {
   display: flex;
   flex-direction: column;
@@ -11,7 +10,7 @@
   font-family: "Barlow", sans-serif;
   font-weight: 400;
   font-style: italic;
-  background-image: url('../public/verdant-leisure\ background.jpg'); /* Specify the image path */
+  background-image: url('../components/image/verdant-leisure\ background.jpg'); /* Specify the image path */
   background-size: cover; /* Make the image cover the entire background */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   background-position: center center

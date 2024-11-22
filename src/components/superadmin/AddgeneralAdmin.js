@@ -6,10 +6,10 @@ const AddgeneralAdmin = () => {
     name: "",
     surname: "",
     email: "",
-    password: "", // New field for password
+    password: "", 
     age: "",
     idNumber: "",
-    role: "", // Default role
+    role: "", 
     photo: null,
   });
 
@@ -42,7 +42,7 @@ const AddgeneralAdmin = () => {
 
       window.localStorage.setItem("emailForSignIn", adminData.email);
       alert(
-        `Admin added successfully. A sign-in email has been sent to ${adminData.email}.`
+        `Admin added successfully. ${adminData.email}.`
       );
     } catch (error) {
       console.error("Error adding admin:", error.message);

@@ -22,7 +22,7 @@ function EmployeeForm() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/employees");
+      const response = await axios.get("http://localhost:3001/employees");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -47,9 +47,9 @@ function EmployeeForm() {
 
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:5000/employees/${currentId}`, form);
+        await axios.put(`http://localhost:3001/employees/${currentId}`, form);
       } else {
-        await axios.post("http://localhost:5000/employees", form);
+        await axios.post("http://localhost:3001/employees", form);
       }
       fetchEmployees();
       setFormData({
@@ -75,7 +75,7 @@ function EmployeeForm() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/employees/${id}`);
+      await axios.delete(`http://localhost:3001/employees/${id}`);
       fetchEmployees();
     } catch (error) {
       console.error("Error deleting employee:", error);

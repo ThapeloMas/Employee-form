@@ -3,18 +3,18 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const admin = require("firebase-admin");
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Initialize Firebase Admin SDK using environment variables
+// Initialize Firebase Admin SDK
 const serviceAccount = {
   type: "service_account",
   project_id: process.env.FIREBASE_PROJECT_ID,
   private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Handling new lines in private key
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
   client_id: process.env.FIREBASE_CLIENT_ID,
   auth_uri: process.env.FIREBASE_AUTH_URI,
@@ -30,28 +30,33 @@ admin.initializeApp({
 const db = admin.firestore();
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Root route handler
+app.get("/", (req, res) => {
+  res.send("Welcome to the Employee & Admin Management API!");
+});
+
+// Utility: Handle Base64 photo conversion
+const processPhoto = (photo) => {
+  return photo
+    ? `data:${photo.mimetype};base64,${photo.buffer.toString("base64")}`
+    : null;
+};
+
+// --------------------- Employee Routes ---------------------
+
 // Add new employee
 app.post("/employees", upload.single("photo"), async (req, res) => {
   const { name, surname, age, idNumber, role } = req.body;
   const photo = req.file;
 
   try {
-    let photoBase64 = null;
-
-    // Convert photo to Base64 if provided
-    if (photo) {
-      photoBase64 = `data:${photo.mimetype};base64,${photo.buffer.toString(
-        "base64"
-      )}`;
-    }
-
     const employeeData = {
       name,
       surname,
       age: parseInt(age),
       idNumber,
       role,
-      photo: photoBase64, // Save Base64 string in Firestore
+      photo: processPhoto(photo),
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
@@ -85,25 +90,16 @@ app.put("/employees/:id", upload.single("photo"), async (req, res) => {
   const photo = req.file;
 
   try {
-    let photoBase64 = null;
-
-    if (photo) {
-      photoBase64 = `data:${photo.mimetype};base64,${photo.buffer.toString(
-        "base64"
-      )}`;
-    }
-
     const employeeData = {
       name,
       surname,
       age: parseInt(age),
       idNumber,
       role,
-      photo: photoBase64, // Save Base64 string in Firestore
+      photo: processPhoto(photo),
     };
 
-    const docRef = db.collection("employees").doc(employeeId);
-    await docRef.update(employeeData);
+    await db.collection("employees").doc(employeeId).update(employeeData);
     res.status(200).send({ id: employeeId, ...employeeData });
   } catch (error) {
     console.error("Error updating employee:", error.message);
@@ -111,8 +107,83 @@ app.put("/employees/:id", upload.single("photo"), async (req, res) => {
   }
 });
 
+// --------------------- Admin Routes ---------------------
+
+// Add a new admin
+app.post("/admins", upload.single("photo"), async (req, res) => {
+  const { name, surname, email, password, age, idNumber, role } = req.body;
+  const photo = req.file;
+
+  try {
+    const userRecord = await admin.auth().createUser({
+      email,
+      password,
+      displayName: `${name} ${surname}`,
+    });
+
+    const adminData = {
+      uid: userRecord.uid,
+      name,
+      surname,
+      email,
+      age: parseInt(age),
+      idNumber,
+      role: role || "general-admin",
+      photo: processPhoto(photo),
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    await db.collection("admins").doc(userRecord.uid).set(adminData);
+    res
+      .status(201)
+      .send({ message: "Admin added successfully!", admin: adminData });
+  } catch (error) {
+    console.error("Error adding admin:", error.message);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+// Fetch all admins
+app.get("/admins", async (req, res) => {
+  try {
+    const snapshot = await db.collection("admins").get();
+    const admins = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    res.status(200).send(admins);
+  } catch (error) {
+    console.error("Error fetching admins:", error.message);
+    res.status(500).send({ error: error.message });
+  }
+});
+
+// Update admin
+app.put("/admins/:id", upload.single("photo"), async (req, res) => {
+  const adminId = req.params.id;
+  const { name, surname, age, idNumber, role } = req.body;
+  const photo = req.file;
+
+  try {
+    const adminData = {
+      name,
+      surname,
+      age: parseInt(age),
+      idNumber,
+      role,
+      photo: processPhoto(photo),
+    };
+
+    await db.collection("admins").doc(adminId).update(adminData);
+    res.status(200).send({ id: adminId, ...adminData });
+  } catch (error) {
+    console.error("Error updating admin:", error.message);
+    res.status(500).send({ error: error.message });
+  }
+});
+
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
